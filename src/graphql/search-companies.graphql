@@ -1,0 +1,8 @@
+query SearchCompanies($query: String!) {
+  experimental_searchCompanies(query: $query) {
+    id
+    name
+    domains
+    logo_url
+  }
+}

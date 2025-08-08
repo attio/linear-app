@@ -1,0 +1,7 @@
+query GetCompanyIdByDealId($dealId: String!) {
+  deal(id: $dealId) {
+    associated_company {
+      id
+    }
+  }
+}

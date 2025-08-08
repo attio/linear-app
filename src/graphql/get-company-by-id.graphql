@@ -1,0 +1,7 @@
+query GetCompanyById($companyId: String!) {
+  company(id: $companyId) {
+    name
+    logo_url
+    domains
+  }
+}

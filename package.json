@@ -1,0 +1,32 @@
+{
+  "name": "linear",
+  "description": "Linear",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "attio": "attio",
+    "dev": "attio dev",
+    "build": "attio build",
+    "format": "biome format .",
+    "format-fix": "npx biome format --write .",
+    "clean": "rm -rf lib && rm -rf dist",
+    "lint": "npx biome lint .",
+    "test": ""
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.0.5",
+    "@types/node": "^24.0.4",
+    "@types/react": "19.0.0",
+    "node-fetch": "3.3.2",
+    "typescript": "5.8.3"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.83.0",
+    "attio": "0.0.1-experimental.20250731",
+    "event-target-polyfill": "^0.0.4",
+    "match-sorter": "8.0.3",
+    "react": "19.0.0",
+    "yet-another-abortcontroller-polyfill": "^0.0.4",
+    "zod": "^4.0.14"
+  }
+}
