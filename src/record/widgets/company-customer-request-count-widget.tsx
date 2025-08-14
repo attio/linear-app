@@ -1,5 +1,5 @@
 import type {RecordWidget} from "attio/client"
-import {runQuery, Widget} from "attio/client"
+import {runQuery, showToast, Widget} from "attio/client"
 import React from "react"
 import "event-target-polyfill"
 import "yet-another-abortcontroller-polyfill"
@@ -31,7 +31,13 @@ const LoadingWidget = ({recordId}: {recordId: string}) => {
                 } else {
                     // If you're triggering the widget, we know you've got a connection
                     // because we display a "no connection" widget if you don't.
-                    await viewCompanyInLinear(recordId)
+                    await viewCompanyInLinear(recordId).catch((error) => {
+                        showToast({
+                            variant: "error",
+                            title: "Error viewing company in Linear",
+                            text: error.message,
+                        })
+                    })
                 }
             }}
         >
