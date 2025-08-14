@@ -5,8 +5,9 @@ const queryByNameOrDomains = `query CustomerByNameOrDomains($name: String!, $dom
   customers(
     filter: {
       or: [
-        { name: { eqIgnoreCase: $name } }
+        # Due to a bug on Linear's side, these clauses need to be in this order:
         { domains: { some: { in: $domains } } }
+        { name: { eqIgnoreCase: $name } }
       ]
     }
     first: 1
