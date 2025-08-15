@@ -41,15 +41,13 @@ const LoadingWidget = ({recordId}: {recordId: string}) => {
                     <Widget.Text.Primary>Customer requests disabled</Widget.Text.Primary>
                     <Widget.Text.Secondary>Click to go to Linear settings</Widget.Text.Secondary>
                 </>
-            ) : customerNeeds !== null ? (
+            ) : (
                 <>
                     <Widget.Text.Primary>{name}</Widget.Text.Primary>
                     <Widget.Text.Secondary>
                         {customerNeeds} customer request{customerNeeds === 1 ? "" : "s"}
                     </Widget.Text.Secondary>
                 </>
-            ) : (
-                <Widget.Text.Primary>{name}</Widget.Text.Primary>
             )}
         </Widget.TextWidget>
     )
@@ -79,7 +77,7 @@ async function load(recordId: string) {
     ])
     const domain = companyResult?.company?.domains?.[0]
     const name = companyResult?.company?.name ?? domain ?? "Unnamed Company"
-    const customerNeeds = customer ? await getCustomerNeedsCount(customer.id) : null
+    const customerNeeds = customer ? await getCustomerNeedsCount(customer.id) : 0
     return {
         name,
         customerNeeds,
