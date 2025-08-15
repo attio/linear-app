@@ -45,40 +45,48 @@ export function LogCustomerRequestDialog({
     return (
         <Form
             onSubmit={async (values) => {
-                if (values.addTo.startsWith("project")) {
-                    const projectId = values.addTo.split(":")[1]
-                    await createCustomerNeed({
-                        body: values.description,
-                        companyRecordId: values.companyRecordId,
-                        projectId,
-                        attachmentUrl: values.attachmentUrl || undefined,
-                    })
-                } else if (values.addTo.startsWith("issue")) {
-                    const issueId = values.addTo.split(":")[1]
-                    await createCustomerNeed({
-                        body: values.description,
-                        companyRecordId: values.companyRecordId,
-                        issueId,
-                        attachmentUrl: values.attachmentUrl || undefined,
-                    })
-                } else {
-                    const issue = await createIssue({
-                        title: values.title,
-                        teamId: values.team,
-                    })
-                    await createCustomerNeed({
-                        body: values.description,
-                        companyRecordId: values.companyRecordId,
-                        issueId: issue.id,
-                        attachmentUrl: values.attachmentUrl || undefined,
+                try {
+                    if (values.addTo.startsWith("project")) {
+                        const projectId = values.addTo.split(":")[1]
+                        await createCustomerNeed({
+                            body: values.description || "",
+                            companyRecordId: values.companyRecordId,
+                            projectId,
+                            attachmentUrl: values.attachmentUrl || undefined,
+                        })
+                    } else if (values.addTo.startsWith("issue")) {
+                        const issueId = values.addTo.split(":")[1]
+                        await createCustomerNeed({
+                            body: values.description || "",
+                            companyRecordId: values.companyRecordId,
+                            issueId,
+                            attachmentUrl: values.attachmentUrl || undefined,
+                        })
+                    } else {
+                        const issue = await createIssue({
+                            title: values.title,
+                            teamId: values.team,
+                        })
+                        await createCustomerNeed({
+                            body: values.description || "",
+                            companyRecordId: values.companyRecordId,
+                            issueId: issue.id,
+                            attachmentUrl: values.attachmentUrl || undefined,
+                        })
+                    }
+                    if (values.companyRecordId) {
+                        queryClient.invalidateQueries({
+                            queryKey: ["company-customer-request-count", values.companyRecordId],
+                        })
+                    }
+                    onDone()
+                } catch (error) {
+                    showToast({
+                        variant: "error",
+                        title: "Error logging customer request",
+                        text: error instanceof Error ? error.message : undefined,
                     })
                 }
-                if (values.companyRecordId) {
-                    queryClient.invalidateQueries({
-                        queryKey: ["company-customer-request-count", values.companyRecordId],
-                    })
-                }
-                onDone()
             }}
         >
             <CompaniesCombobox Combobox={Combobox} companyId={companyRecordId} />
