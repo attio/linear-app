@@ -1,10 +1,10 @@
-import type {RecordWidget} from "attio/client"
 import {runQuery, showToast, Widget} from "attio/client"
 import React from "react"
 import "event-target-polyfill"
 import "yet-another-abortcontroller-polyfill"
 
 import {QueryClient, QueryClientProvider, useSuspenseQuery} from "@tanstack/react-query"
+import type {App} from "attio/client"
 import GetCompanyById from "../../graphql/get-company-by-id.graphql"
 import {createCustomerUrl} from "../../linear/customers/create-customer-url"
 import getCustomerByCompanyRecordId from "../../linear/customers/get-customer-by-company-record-id.server"
@@ -59,7 +59,7 @@ const LoadingWidget = ({recordId}: {recordId: string}) => {
     )
 }
 
-export const recordWidget: RecordWidget = {
+export const companyCustomerRequestCount: App.Record.Widget = {
     id: "company-customer-request-count",
     label: "Customer requests",
     color: "#5e6ad2",

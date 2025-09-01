@@ -1,10 +1,10 @@
-import type {RecordAction} from "attio/client"
+import type {App} from "attio/client"
 import {showDialog} from "attio/client"
 import {LogCustomerRequestDialog} from "../../components/log-customer-request-dialog"
 import ensureConnection from "../../utils/ensure-connection.server"
 import {ensureCustomerRequestsEnabled} from "../../utils/ensure-customer-requests-enabled"
 
-export const recordAction: RecordAction = {
+export const companyLogCustomerRequestAction: App.Record.Action = {
     id: "company-log-customer-request-action",
     onTrigger: async ({recordId}) => {
         await ensureConnection()
