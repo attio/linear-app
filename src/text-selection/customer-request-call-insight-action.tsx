@@ -1,7 +1,8 @@
-import {type CallRecordingInsightTextSelectionAction, showDialog} from "attio/client"
+import type {App} from "attio/client"
+import {showDialog} from "attio/client"
 import {LogCustomerRequestDialog} from "../components/log-customer-request-dialog"
 
-export const callRecordingInsightTextSelectionAction: CallRecordingInsightTextSelectionAction = {
+export const customerRequestTextSelectionCallInsightAction: App.CallRecording.Insight.TextAction = {
     id: "customer-request-text-selection-call-insight-action",
     label: "Log customer request",
     onTrigger: async ({markdown}) => {

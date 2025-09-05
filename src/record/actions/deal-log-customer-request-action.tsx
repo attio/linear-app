@@ -1,11 +1,11 @@
-import type {RecordAction} from "attio/client"
+import type {App} from "attio/client"
 import {runQuery, showDialog, showToast} from "attio/client"
 import {LogCustomerRequestDialog} from "../../components/log-customer-request-dialog"
 import GetCompanyIdByDealId from "../../graphql/get-company-id-by-deal-id.graphql"
 import ensureConnection from "../../utils/ensure-connection.server"
 import {ensureCustomerRequestsEnabled} from "../../utils/ensure-customer-requests-enabled"
 
-export const recordAction: RecordAction = {
+export const dealLogCustomerRequestAction: App.Record.Action = {
     id: "deal-log-customer-request-action",
     onTrigger: async ({recordId}) => {
         await ensureConnection()
