@@ -33,15 +33,22 @@ export function LogCustomerRequestDialog({
     attachmentUrl?: string
     onDone: () => void
 }) {
-    const {Form, TextInput, SubmitButton, Combobox, Experimental_RichTextInput, WithState} =
-        useForm(formSchema, {
-            companyRecordId,
-            description,
-            addTo: "",
-            title: "",
-            team: "",
-            attachmentUrl,
-        })
+    const {
+        Form,
+        TextInput,
+        SubmitButton,
+        Combobox,
+        Experimental_RichTextInput,
+        WithState,
+        Experimental_RecordCombobox,
+    } = useForm(formSchema, {
+        companyRecordId,
+        description,
+        addTo: "",
+        title: "",
+        team: "",
+        attachmentUrl,
+    })
     return (
         <Form
             onSubmit={async (values) => {
@@ -89,7 +96,7 @@ export function LogCustomerRequestDialog({
                 }
             }}
         >
-            <CompaniesCombobox Combobox={Combobox} companyId={companyRecordId} />
+            <CompaniesCombobox Combobox={Experimental_RecordCombobox} companyId={companyRecordId} />
 
             <Experimental_RichTextInput
                 label="Customer request details"
