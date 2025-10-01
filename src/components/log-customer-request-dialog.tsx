@@ -101,10 +101,7 @@ export function LogCustomerRequestDialog({
         }
       }}
     >
-      <CompaniesCombobox
-        Combobox={Experimental_AttioRecordCombobox}
-        companyId={companyRecordId}
-      />
+      <CompaniesCombobox Combobox={Experimental_AttioRecordCombobox} companyId={companyRecordId} />
 
       <Experimental_RichTextInput
         label="Customer request details"
