@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.83.0",
-    "attio": "0.0.1-experimental.20250829.2",
+    "attio": "0.0.1-experimental.20251001.1",
     "event-target-polyfill": "^0.0.4",
     "match-sorter": "8.0.3",
     "react": "19.0.0",

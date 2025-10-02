@@ -1,4 +1,4 @@
-import {Button, Divider, Forms, Row, showToast, useForm} from "attio/client"
+import {Button, Divider, Forms, showToast, useForm} from "attio/client"
 import getOrCreateCustomer from "../linear/customers/get-or-create-customer.server"
 import createIssueServer from "../linear/issues/create-issue.server"
 import type {CreateIssueInput} from "../linear/issues/schema"
@@ -40,6 +40,7 @@ export function LogCustomerRequestDialog({
         Combobox,
         Experimental_RichTextInput,
         Experimental_AttioRecordCombobox,
+        InputGroup,
         WithState,
     } = useForm(formSchema, {
         companyRecord: companyRecordId
@@ -117,10 +118,10 @@ export function LogCustomerRequestDialog({
             <WithState values>
                 {({values}: {values: {addTo: string}}) =>
                     values.addTo === NEW_ISSUE_OPTION ? (
-                        <Row>
+                        <InputGroup>
                             <TextInput label="Issue title" name="title" placeholder="Issue title" />
                             <TeamsCombobox Combobox={Combobox} />
-                        </Row>
+                        </InputGroup>
                     ) : (
                         // biome-ignore lint/complexity/noUselessFragments: WithState requires JSX.Element, cannot return null
                         <></>
