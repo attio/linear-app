@@ -15,5 +15,10 @@ export async function updateCustomerExternalIds(
         variables: {id, input: {externalIds}},
     })
 
+    if (result.errors) {
+        console.error("Failed to update customer external ids", result)
+        return false
+    }
+
     return result.data.customerUpdate.success
 }
