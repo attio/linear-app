@@ -14,8 +14,8 @@ export function CompaniesCombobox({
             <Combobox
                 label="Company"
                 name="companyRecordId"
+                decorated
                 options={companiesProvider}
-                __experimental_decorated
                 disabled
             />
         )
@@ -24,7 +24,7 @@ export function CompaniesCombobox({
         <Combobox
             label="Company"
             name="companyRecordId"
-            __experimental_decorated
+            decorated
             options={companiesProvider}
             placeholder="Select a company..."
             searchPlaceholder="Search companies..."

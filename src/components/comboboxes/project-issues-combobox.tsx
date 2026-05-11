@@ -11,7 +11,7 @@ export function ProjectIssuesCombobox({
         <Combobox
             label="Add request to"
             name="addTo"
-            __experimental_decorated
+            decorated
             options={projectsIssuesProvider}
             placeholder="Select a project or issue..."
             searchPlaceholder="Search projects and issues..."

@@ -1,4 +1,4 @@
-import type {App} from "attio/client"
+import type {App} from "attio"
 
 import {companyLogCustomerRequestAction} from "./record/actions/company-log-customer-request-action"
 import {companyViewCompanyAction} from "./record/actions/company-view-company-action"

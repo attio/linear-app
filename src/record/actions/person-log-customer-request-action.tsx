@@ -1,4 +1,4 @@
-import type {App} from "attio/client"
+import type {App} from "attio"
 import {runQuery, showDialog, showToast} from "attio/client"
 import {LogCustomerRequestDialog} from "../../components/log-customer-request-dialog"
 import GetCompanyByPersonId from "../../graphql/get-company-id-by-person-id.graphql"

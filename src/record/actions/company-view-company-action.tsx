@@ -1,4 +1,4 @@
-import type {App} from "attio/client"
+import type {App} from "attio"
 import {showToast} from "attio/client"
 import {viewCompanyInLinear} from "../../utils/view-company-in-linear"
 
