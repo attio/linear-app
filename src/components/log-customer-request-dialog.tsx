@@ -1,4 +1,4 @@
-import {Button, Divider, Forms, Row, showToast, useForm} from "attio/client"
+import {Button, Divider, Forms, showToast, useForm} from "attio/client"
 import getOrCreateCustomer from "../linear/customers/get-or-create-customer.server"
 import createIssueServer from "../linear/issues/create-issue.server"
 import type {CreateIssueInput} from "../linear/issues/schema"
@@ -33,7 +33,7 @@ export function LogCustomerRequestDialog({
     attachmentUrl?: string
     onDone: () => void
 }) {
-    const {Form, TextInput, SubmitButton, Combobox, Experimental_RichTextInput, WithState} =
+    const {Form, TextInput, SubmitButton, Combobox, RichTextInput, WithState, InputGroup} =
         useForm(formSchema, {
             companyRecordId,
             description,
@@ -91,7 +91,7 @@ export function LogCustomerRequestDialog({
         >
             <CompaniesCombobox Combobox={Combobox} companyId={companyRecordId} />
 
-            <Experimental_RichTextInput
+            <RichTextInput
                 label="Customer request details"
                 name="description"
                 placeholder="Add request details..."
@@ -102,17 +102,17 @@ export function LogCustomerRequestDialog({
             <WithState values>
                 {({values}: {values: {addTo: string}}) =>
                     values.addTo === NEW_ISSUE_OPTION ? (
-                        <Row>
+                        <InputGroup>
                             <TextInput label="Issue title" name="title" placeholder="Issue title" />
                             <TeamsCombobox Combobox={Combobox} />
-                        </Row>
+                        </InputGroup>
                     ) : (
                         // biome-ignore lint/complexity/noUselessFragments: WithState requires JSX.Element, cannot return null
                         <></>
                     )
                 }
             </WithState>
-            <Button label="Cancel" variant="secondary" onClick={onDone} keyboardHint="esc" />
+            <Button label="Cancel" variant="secondary" onClick={onDone} />
             <SubmitButton label="Log request" />
         </Form>
     )

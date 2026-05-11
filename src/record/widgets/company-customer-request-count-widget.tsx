@@ -4,7 +4,7 @@ import "event-target-polyfill"
 import "yet-another-abortcontroller-polyfill"
 
 import {QueryClient, QueryClientProvider, useSuspenseQuery} from "@tanstack/react-query"
-import type {App} from "attio/client"
+import type {App} from "attio"
 import GetCompanyById from "../../graphql/get-company-by-id.graphql"
 import {createCustomerUrl} from "../../linear/customers/create-customer-url"
 import getCustomerByCompanyRecordId from "../../linear/customers/get-customer-by-company-record-id.server"

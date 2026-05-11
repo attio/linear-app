@@ -1,4 +1,4 @@
-import type {App} from "attio/client"
+import type {App} from "attio"
 import {showDialog} from "attio/client"
 import {LogCustomerRequestDialog} from "../components/log-customer-request-dialog"
 

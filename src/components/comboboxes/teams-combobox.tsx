@@ -11,7 +11,7 @@ export function TeamsCombobox({
         <Combobox
             label="Team"
             name="team"
-            __experimental_decorated
+            decorated
             options={teamsProvider}
             searchPlaceholder="Search teams..."
             placeholder="Select a team..."
