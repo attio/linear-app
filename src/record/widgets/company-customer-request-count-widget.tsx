@@ -1,3 +1,4 @@
+import {isErrored} from "@attio/fetchable"
 import {runQuery, showToast, Widget} from "attio/client"
 import React from "react"
 import "event-target-polyfill"
@@ -7,13 +8,11 @@ import {QueryClient, QueryClientProvider, useSuspenseQuery} from "@tanstack/reac
 import type {App} from "attio"
 import GetCompanyById from "../../graphql/get-company-by-id.graphql"
 import {createCustomerUrl} from "../../linear/customers/create-customer-url"
-import getCustomerByCompanyRecordId from "../../linear/customers/get-customer-by-company-record-id.server"
-import getCustomerNeedsCount from "../../linear/needs/get-customer-needs-count.server"
 import {createEnableCustomersFeatureUrl} from "../../linear/organizations/create-enable-customers-feature-url"
-import getOrganization from "../../linear/organizations/get-organization.server"
+import getOrganization from "../../utils/server/get-organization.server"
 import {viewCompanyInLinear} from "../../utils/view-company-in-linear"
-
-export const queryClient = new QueryClient()
+import getCustomerByCompanyRecordId from "./server/get-customer-by-company-record-id.server"
+import getCustomerNeedCount from "./server/get-customer-need-count.server"
 
 const LoadingWidget = ({recordId}: {recordId: string}) => {
     const {data} = useSuspenseQuery({
@@ -59,6 +58,37 @@ const LoadingWidget = ({recordId}: {recordId: string}) => {
     )
 }
 
+async function load(recordId: string) {
+    const [companyResult, customerResult, organizationResult] = await Promise.all([
+        runQuery(GetCompanyById, {companyId: recordId}),
+        getCustomerByCompanyRecordId(recordId),
+        getOrganization(),
+    ])
+    if (isErrored(customerResult)) throw new Error(customerResult.error.errorMessage)
+    if (isErrored(organizationResult)) throw new Error(organizationResult.error.errorMessage)
+
+    const domain = companyResult?.company?.domains?.[0]
+    const name = companyResult?.company?.name ?? domain ?? "Unnamed Company"
+    const customer = customerResult.value
+    const organization = organizationResult.value
+    let customerNeeds = 0
+    if (customer) {
+        const customerNeedsResult = await getCustomerNeedCount(customer.id)
+        if (isErrored(customerNeedsResult)) throw new Error(customerNeedsResult.error.errorMessage)
+        customerNeeds = customerNeedsResult.value
+    }
+    return {
+        name,
+        customerNeeds,
+        enableCustomersUrl: organization.customersEnabled
+            ? null
+            : createEnableCustomersFeatureUrl(organization.urlKey),
+        customerUrl: customer ? createCustomerUrl(organization.urlKey, customer.id) : null,
+    }
+}
+
+export const queryClient = new QueryClient()
+
 export const companyCustomerRequestCount: App.Record.Widget = {
     id: "company-customer-request-count",
     label: "Customer requests",
@@ -73,23 +103,4 @@ export const companyCustomerRequestCount: App.Record.Widget = {
         )
     },
     objects: ["companies"],
-}
-
-async function load(recordId: string) {
-    const [companyResult, customer, organization] = await Promise.all([
-        runQuery(GetCompanyById, {companyId: recordId}),
-        getCustomerByCompanyRecordId(recordId),
-        getOrganization(),
-    ])
-    const domain = companyResult?.company?.domains?.[0]
-    const name = companyResult?.company?.name ?? domain ?? "Unnamed Company"
-    const customerNeeds = customer ? await getCustomerNeedsCount(customer.id) : 0
-    return {
-        name,
-        customerNeeds,
-        enableCustomersUrl: organization.customersEnabled
-            ? null
-            : createEnableCustomersFeatureUrl(organization.urlKey),
-        customerUrl: customer ? createCustomerUrl(organization.urlKey, customer.id) : null,
-    }
 }

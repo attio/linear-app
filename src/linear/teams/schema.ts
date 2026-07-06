@@ -1,15 +1,19 @@
 import {z} from "zod"
 
-export const linearTeamFragment = `
-    id
-    name
-    color
-`
-
-export const linearTeamSchema = z.object({
+const linearTeamSchema = z.object({
     id: z.string(),
     name: z.string(),
     color: z.string(),
 })
 
 export type LinearTeam = z.infer<typeof linearTeamSchema>
+
+export const getTeamDataSchema = z.object({
+    team: linearTeamSchema.nullable(),
+})
+
+export const teamsDataSchema = z.object({
+    teams: z.object({
+        nodes: z.array(linearTeamSchema),
+    }),
+})

@@ -5,6 +5,22 @@ import GetCompanyIdByDealId from "../../graphql/get-company-id-by-deal-id.graphq
 import ensureConnection from "../../utils/ensure-connection.server"
 import {ensureCustomerRequestsEnabled} from "../../utils/ensure-customer-requests-enabled"
 
+async function getCompanyRecordId(recordId: string) {
+    const {hideToast} = await showToast({
+        variant: "neutral",
+        title: "Looking up company...",
+        dismissable: false,
+        durationMs: Number.POSITIVE_INFINITY,
+    })
+
+    try {
+        const data = await runQuery(GetCompanyIdByDealId, {dealId: recordId})
+        return data?.deal?.associated_company?.id
+    } finally {
+        hideToast()
+    }
+}
+
 export const dealLogCustomerRequestAction: App.Record.Action = {
     id: "deal-log-customer-request-action",
     onTrigger: async ({recordId}) => {
@@ -24,20 +40,4 @@ export const dealLogCustomerRequestAction: App.Record.Action = {
     },
     label: "Log customer request",
     objects: ["deals"],
-}
-
-async function getCompanyRecordId(recordId: string) {
-    const {hideToast} = await showToast({
-        variant: "neutral",
-        title: "Looking up company...",
-        dismissable: false,
-        durationMs: Number.POSITIVE_INFINITY,
-    })
-
-    try {
-        const data = await runQuery(GetCompanyIdByDealId, {dealId: recordId})
-        return data?.deal?.associated_company?.id
-    } finally {
-        hideToast()
-    }
 }

@@ -1,8 +1,5 @@
 {
-  "include": [
-    "src",
-    ".attio/**/*"
-  ],
+  "include": ["src", ".attio/**/*"],
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
@@ -18,11 +15,7 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "preserve",
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ES6",
     "moduleResolution": "bundler",
     "noFallthroughCasesInSwitch": true,
@@ -43,12 +36,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "target": "ES2019",
-    "types": [
-      "attio/client",
-      "node"
-    ]
+    "types": ["attio/client", "node"]
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", "src/__mocks__"]
 }

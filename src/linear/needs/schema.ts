@@ -1,12 +1,15 @@
 import {z} from "zod"
+import {linearSuccessMutationResultSchema} from "../client/schema"
 
-export const customerNeedSchema = z.object({
+const customerNeedSchema = z.object({
     id: z.string(),
 })
 
-export type LinearCustomerNeed = z.infer<typeof customerNeedSchema>
+const customerNeedMutationResultSchema = linearSuccessMutationResultSchema.extend({
+    need: customerNeedSchema.nullable(),
+})
 
-export const customerNeedCreateInputSchema = z.object({
+const _customerNeedCreateInputSchema = z.object({
     /** The identifier in UUID v4 format. If none is provided, the backend will generate one. */
     id: z.string().optional(),
     /** The body of the customer need. */
@@ -23,4 +26,18 @@ export const customerNeedCreateInputSchema = z.object({
     attachmentUrl: z.string().optional(),
 })
 
-export type CustomerNeedCreateInput = z.infer<typeof customerNeedCreateInputSchema>
+export type LinearCustomerNeed = z.infer<typeof customerNeedSchema>
+
+export type LinearCustomerNeedMutationResult = z.infer<typeof customerNeedMutationResultSchema>
+
+export const createCustomerNeedDataSchema = z.object({
+    customerNeedCreate: customerNeedMutationResultSchema,
+})
+
+export const getCustomerNeedsDataSchema = z.object({
+    customerNeeds: z.object({
+        nodes: z.array(customerNeedSchema),
+    }),
+})
+
+export type CustomerNeedCreateInput = z.infer<typeof _customerNeedCreateInputSchema>

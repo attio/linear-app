@@ -1,12 +1,14 @@
 import type {FormApi} from "attio/client"
+import {useTeamsProvider} from "../../utils/hooks/use-teams-provider"
 import type {LogCustomerRequestFormSchema} from "../log-customer-request-dialog"
-import {teamsProvider} from "./teams-options-provider"
 
 export function TeamsCombobox({
     Combobox,
 }: {
     Combobox: FormApi<LogCustomerRequestFormSchema>["Combobox"]
 }) {
+    const teamsProvider = useTeamsProvider("user-connection")
+
     return (
         <Combobox
             label="Team"

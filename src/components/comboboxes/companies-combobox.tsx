@@ -1,6 +1,6 @@
 import type {FormApi} from "attio/client"
+import {useCompaniesProvider} from "../../utils/hooks/use-companies-provider"
 import type {LogCustomerRequestFormSchema} from "../log-customer-request-dialog"
-import {companiesProvider} from "./companies-options-provider"
 
 export function CompaniesCombobox({
     Combobox,
@@ -9,6 +9,8 @@ export function CompaniesCombobox({
     Combobox: FormApi<LogCustomerRequestFormSchema>["Combobox"]
     companyId?: string
 }) {
+    const companiesProvider = useCompaniesProvider()
+
     if (companyId) {
         return (
             <Combobox

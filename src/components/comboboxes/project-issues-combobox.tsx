@@ -1,12 +1,14 @@
 import type {FormApi} from "attio/client"
+import {useProjectsIssuesProvider} from "../../utils/hooks/use-projects-issues-provider"
 import type {LogCustomerRequestFormSchema} from "../log-customer-request-dialog"
-import {projectsIssuesProvider} from "./projects-issues-options-provider"
 
 export function ProjectIssuesCombobox({
     Combobox,
 }: {
     Combobox: FormApi<LogCustomerRequestFormSchema>["Combobox"]
 }) {
+    const projectsIssuesProvider = useProjectsIssuesProvider("user-connection")
+
     return (
         <Combobox
             label="Add request to"

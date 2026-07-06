@@ -1,13 +1,13 @@
+import {isErrored} from "@attio/fetchable"
 import {Button, Divider, Forms, showToast, useForm} from "attio/client"
-import getOrCreateCustomer from "../linear/customers/get-or-create-customer.server"
-import createIssueServer from "../linear/issues/create-issue.server"
-import type {CreateIssueInput} from "../linear/issues/schema"
-import createCustomerNeedServer from "../linear/needs/create-customer-need.server"
-import type {CustomerNeedCreateInput} from "../linear/needs/schema"
+import type {CreateIssueInput, CustomerNeedCreateInput} from "../linear"
 import {queryClient} from "../record/widgets/company-customer-request-count-widget"
+import getOrCreateCustomer from "../utils/server/get-or-create-customer.server"
 import {CompaniesCombobox} from "./comboboxes/companies-combobox"
 import {ProjectIssuesCombobox} from "./comboboxes/project-issues-combobox"
 import {TeamsCombobox} from "./comboboxes/teams-combobox"
+import createCustomerNeedServer from "./create-customer-need.server"
+import createIssue from "./create-issue.server"
 
 const NEW_ISSUE_OPTION = "NEW"
 
@@ -18,6 +18,58 @@ const formSchema = {
     description: Forms.string().optional(),
     companyRecordId: Forms.string(),
     attachmentUrl: Forms.string().optional().url(),
+}
+
+async function handleCreateIssue(input: CreateIssueInput) {
+    const {hideToast} = await showToast({
+        title: "Creating issue...",
+        dismissable: false,
+        variant: "neutral",
+    })
+
+    try {
+        const result = await createIssue(input, {requestUsing: "user-connection"})
+        if (isErrored(result)) throw new Error(result.error.errorMessage)
+        return result.value
+    } finally {
+        await hideToast()
+    }
+}
+
+async function getCustomer(companyRecordId: string) {
+    const {hideToast} = await showToast({
+        variant: "neutral",
+        title: "Looking up customer...",
+        dismissable: false,
+        durationMs: Number.POSITIVE_INFINITY,
+    })
+
+    const result = await getOrCreateCustomer(companyRecordId).finally(hideToast)
+    if (isErrored(result)) throw new Error(result.error.errorMessage)
+    return result.value
+}
+
+async function createCustomerNeed({
+    companyRecordId,
+    ...input
+}: Omit<CustomerNeedCreateInput, "customerId"> & {companyRecordId: string}) {
+    const customer = await getCustomer(companyRecordId)
+    const {hideToast} = await showToast({
+        title: "Creating customer request...",
+        dismissable: false,
+        variant: "neutral",
+    })
+    const result = await createCustomerNeedServer(
+        {...input, customerId: customer.id},
+        {requestUsing: "user-connection"}
+    ).finally(hideToast)
+    if (isErrored(result)) {
+        console.error("createCustomerNeed failed", result.error)
+        showToast({title: result.error.errorMessage, variant: "error"})
+        throw new Error(result.error.errorMessage)
+    }
+    await showToast({title: "Customer request created", variant: "success"})
+    return result.value
 }
 
 export type LogCustomerRequestFormSchema = typeof formSchema
@@ -33,15 +85,17 @@ export function LogCustomerRequestDialog({
     attachmentUrl?: string
     onDone: () => void
 }) {
-    const {Form, TextInput, SubmitButton, Combobox, RichTextInput, WithState, InputGroup} =
-        useForm(formSchema, {
+    const {Form, TextInput, SubmitButton, Combobox, RichTextInput, WithState, InputGroup} = useForm(
+        formSchema,
+        {
             companyRecordId,
             description,
             addTo: "",
             title: "",
             team: "",
             attachmentUrl,
-        })
+        }
+    )
     return (
         <Form
             onSubmit={async (values) => {
@@ -63,7 +117,7 @@ export function LogCustomerRequestDialog({
                             attachmentUrl: values.attachmentUrl || undefined,
                         })
                     } else {
-                        const issue = await createIssue({
+                        const issue = await handleCreateIssue({
                             title: values.title,
                             teamId: values.team,
                         })
@@ -116,53 +170,4 @@ export function LogCustomerRequestDialog({
             <SubmitButton label="Log request" />
         </Form>
     )
-}
-
-async function createIssue(input: CreateIssueInput) {
-    const {hideToast} = await showToast({
-        title: "Creating issue...",
-        dismissable: false,
-        variant: "neutral",
-    })
-    const issue = await createIssueServer(input)
-    await hideToast()
-    if (!issue) {
-        throw new Error("Failed to create issue")
-    }
-    return issue
-}
-
-async function getCustomer(companyRecordId: string) {
-    const {hideToast} = await showToast({
-        variant: "neutral",
-        title: "Looking up customer...",
-        dismissable: false,
-        durationMs: Number.POSITIVE_INFINITY,
-    })
-
-    return await getOrCreateCustomer(companyRecordId).finally(hideToast)
-}
-
-async function createCustomerNeed({
-    companyRecordId,
-    ...input
-}: Omit<CustomerNeedCreateInput, "customerId"> & {companyRecordId: string}) {
-    const customer = await getCustomer(companyRecordId)
-    const {hideToast} = await showToast({
-        title: "Creating customer request...",
-        dismissable: false,
-        variant: "neutral",
-    })
-    const customerNeed = await createCustomerNeedServer({...input, customerId: customer.id})
-        .catch((error) => {
-            showToast({title: error.message, variant: "error"})
-            throw error
-        })
-        .finally(hideToast)
-    if (!customerNeed) {
-        showToast({title: "Failed to create customer request", variant: "error"})
-        throw new Error("Failed to create customer request")
-    }
-    await showToast({title: "Customer request created", variant: "success"})
-    return customerNeed
 }

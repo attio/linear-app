@@ -1,5 +1,5 @@
 import {getUserConnection} from "attio/server"
 
-export default function ensureConnection() {
+export default async function ensureConnection() {
     return Boolean(getUserConnection())
 }

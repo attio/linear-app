@@ -1,14 +1,6 @@
 import {z} from "zod"
 
-export const linearWorkflowStateFragment = `
-    id
-    name
-    description
-    color
-    position
-`
-
-export const linearWorkflowStateSchema = z.object({
+const linearWorkflowStateSchema = z.object({
     id: z.string(),
     name: z.string(),
     description: z.string().nullable(),
@@ -17,3 +9,9 @@ export const linearWorkflowStateSchema = z.object({
 })
 
 export type LinearWorkflowState = z.infer<typeof linearWorkflowStateSchema>
+
+export const listWorkflowStatesDataSchema = z.object({
+    workflowStates: z.object({
+        nodes: z.array(linearWorkflowStateSchema),
+    }),
+})

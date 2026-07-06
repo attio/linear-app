@@ -1,22 +1,18 @@
 import {z} from "zod"
+import {linearSuccessMutationResultSchema} from "../client/schema"
 
-export const linearCustomerFragment = `
-    id
-    name
-    logoUrl
-    externalIds
-`
-
-export const linearCustomerSchema = z.object({
+const linearCustomerSchema = z.object({
     id: z.string(),
     name: z.string(),
     logoUrl: z.string().nullable(),
     externalIds: z.array(z.string()),
 })
 
-export type LinearCustomer = z.infer<typeof linearCustomerSchema>
+const linearCustomerMutationResultSchema = linearSuccessMutationResultSchema.extend({
+    customer: linearCustomerSchema.nullable(),
+})
 
-export const customerCreateInputSchema = z.object({
+const _createCustomerInputSchema = z.object({
     /** The domains associated with this customer. */
     domains: z.array(z.string()).optional(),
     /** The ids of the customers in external systems. */
@@ -41,4 +37,22 @@ export const customerCreateInputSchema = z.object({
     tierId: z.string().optional(),
 })
 
-export type CustomerCreateInput = z.infer<typeof customerCreateInputSchema>
+export type LinearCustomer = z.infer<typeof linearCustomerSchema>
+
+export type LinearCustomerMutationResult = z.infer<typeof linearCustomerMutationResultSchema>
+
+export const customersDataSchema = z.object({
+    customers: z.object({
+        nodes: z.array(linearCustomerSchema),
+    }),
+})
+
+export const createCustomerDataSchema = z.object({
+    customerCreate: linearCustomerMutationResultSchema,
+})
+
+export const updateCustomerDataSchema = z.object({
+    customerUpdate: linearSuccessMutationResultSchema,
+})
+
+export type CreateCustomerInput = z.infer<typeof _createCustomerInputSchema>

@@ -1,13 +1,8 @@
+import {isErrored} from "@attio/fetchable"
 import {showToast} from "attio/client"
-
 import {createCustomerUrl} from "../linear/customers/create-customer-url"
-import getOrCreateCustomer from "../linear/customers/get-or-create-customer.server"
-import getOrganization from "../linear/organizations/get-organization.server"
-
-export async function viewCompanyInLinear(recordId: string) {
-    const url = await getCustomerUrl(recordId)
-    window.open(url, "_blank")
-}
+import getOrCreateCustomer from "./server/get-or-create-customer.server"
+import getOrganization from "./server/get-organization.server"
 
 async function getCustomerUrl(recordId: string) {
     const {hideToast} = await showToast({
@@ -18,12 +13,19 @@ async function getCustomerUrl(recordId: string) {
     })
 
     try {
-        const [customer, organization] = await Promise.all([
+        const [customerResult, organizationResult] = await Promise.all([
             getOrCreateCustomer(recordId),
             getOrganization(),
         ])
-        return createCustomerUrl(organization.urlKey, customer.id)
+        if (isErrored(customerResult)) throw new Error(customerResult.error.errorMessage)
+        if (isErrored(organizationResult)) throw new Error(organizationResult.error.errorMessage)
+        return createCustomerUrl(organizationResult.value.urlKey, customerResult.value.id)
     } finally {
         hideToast()
     }
+}
+
+export async function viewCompanyInLinear(recordId: string) {
+    const url = await getCustomerUrl(recordId)
+    window.open(url, "_blank")
 }

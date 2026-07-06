@@ -1,6 +1,8 @@
+import {isErrored} from "@attio/fetchable"
 import {confirm, showToast} from "attio/client"
+import type {LinearOrganization} from "../linear"
 import {createEnableCustomersFeatureUrl} from "../linear/organizations/create-enable-customers-feature-url"
-import getOrganization from "../linear/organizations/get-organization.server"
+import getOrganization from "./server/get-organization.server"
 
 /** Cache when `true` to not check on every action */
 let wasEnabled: true | undefined
@@ -20,7 +22,17 @@ export async function ensureCustomerRequestsEnabled() {
         durationMs: Number.POSITIVE_INFINITY,
     })
 
-    const organization = await getOrganization().finally(hideToast)
+    const organizationResult = await getOrganization().finally(hideToast)
+    if (isErrored(organizationResult)) {
+        await showToast({
+            variant: "error",
+            title: "Could not verify customer requests",
+            text: "Check your Linear connection and try again.",
+        })
+        return false
+    }
+    const organization: LinearOrganization = organizationResult.value
+
     if (!organization.customersEnabled) {
         const shouldOpen = await confirm({
             title: "Customer requests disabled",

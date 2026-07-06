@@ -5,6 +5,22 @@ import GetCompanyByPersonId from "../../graphql/get-company-id-by-person-id.grap
 import ensureConnection from "../../utils/ensure-connection.server"
 import {ensureCustomerRequestsEnabled} from "../../utils/ensure-customer-requests-enabled"
 
+async function getCompanyRecordId(recordId: string) {
+    const {hideToast} = await showToast({
+        variant: "neutral",
+        title: "Looking up company...",
+        dismissable: false,
+        durationMs: Number.POSITIVE_INFINITY,
+    })
+
+    try {
+        const data = await runQuery(GetCompanyByPersonId, {personId: recordId})
+        return data?.person?.company?.id
+    } finally {
+        hideToast()
+    }
+}
+
 export const personLogCustomerRequestAction: App.Record.Action = {
     id: "person-log-customer-request-action",
     onTrigger: async ({recordId}) => {
@@ -24,20 +40,4 @@ export const personLogCustomerRequestAction: App.Record.Action = {
     },
     label: "Log customer request",
     objects: ["people"],
-}
-
-async function getCompanyRecordId(recordId: string) {
-    const {hideToast} = await showToast({
-        variant: "neutral",
-        title: "Looking up company...",
-        dismissable: false,
-        durationMs: Number.POSITIVE_INFINITY,
-    })
-
-    try {
-        const data = await runQuery(GetCompanyByPersonId, {personId: recordId})
-        return data?.person?.company?.id
-    } finally {
-        hideToast()
-    }
 }
