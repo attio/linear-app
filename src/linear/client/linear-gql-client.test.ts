@@ -61,4 +61,53 @@ describe("validateGqlResponse", () => {
             })
         }
     })
+
+    it("returns a mutation error when data is null and errors are present", () => {
+        const result = validateGqlResponse(getIssueDataSchema, {
+            data: null,
+            errors: [
+                {
+                    message: "Invalid scope: `write` required",
+                    extensions: {
+                        type: "forbidden",
+                        code: "FORBIDDEN",
+                        statusCode: 403,
+                        userError: true,
+                    },
+                },
+            ],
+        })
+
+        expect(isErrored(result)).toBe(true)
+        if (isErrored(result)) {
+            expect(result.error).toEqual({
+                code: LinearGqlClientErrorCode.MutationError,
+                errorMessage: "Invalid scope: `write` required",
+            })
+        }
+    })
+
+    it("returns a mutation error when data key is absent and errors are present", () => {
+        const result = validateGqlResponse(getIssueDataSchema, {
+            errors: [
+                {
+                    message: "Invalid scope: `write` required",
+                    extensions: {
+                        type: "forbidden",
+                        code: "FORBIDDEN",
+                        statusCode: 403,
+                        userError: true,
+                    },
+                },
+            ],
+        })
+
+        expect(isErrored(result)).toBe(true)
+        if (isErrored(result)) {
+            expect(result.error).toEqual({
+                code: LinearGqlClientErrorCode.MutationError,
+                errorMessage: "Invalid scope: `write` required",
+            })
+        }
+    })
 })

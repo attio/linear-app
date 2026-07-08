@@ -18,7 +18,7 @@ const linearGraphqlErrorsSchema = z
                 code: z.string().optional(),
                 statusCode: z.number().optional(),
                 userError: z.boolean().optional(),
-                userPresentableMessage: z.string(),
+                userPresentableMessage: z.string().optional(),
             }),
         })
     )
@@ -26,7 +26,7 @@ const linearGraphqlErrorsSchema = z
 
 export function linearGqlResponseSchema<TDataSchema extends z.ZodType>(dataSchema: TDataSchema) {
     return z.object({
-        data: dataSchema,
+        data: dataSchema.nullish(),
         errors: linearGraphqlErrorsSchema,
     })
 }
