@@ -55,20 +55,7 @@ export function validateGqlResponse<TDataSchema extends z.ZodType>(
         })
     }
 
-    const {data, errors} = parsed.data as {
-        data: z.infer<TDataSchema> | null | undefined
-        errors?: Array<{
-            message?: string
-            extensions?: {userPresentableMessage?: string}
-        }>
-    }
-
-    if (data == null && (!errors || errors.length === 0)) {
-        return errored({
-            code: LinearGqlClientErrorCode.ValidationError,
-            errorMessage: "Response missing both data and errors",
-        })
-    }
+    const {data, errors} = parsed.data
 
     if (errors && errors.length > 0) {
         const errorMessage = errors
@@ -86,7 +73,14 @@ export function validateGqlResponse<TDataSchema extends z.ZodType>(
         })
     }
 
-    return complete(data!)
+    if (data === null || data === undefined) {
+        return errored({
+            code: LinearGqlClientErrorCode.ValidationError,
+            errorMessage: "Response missing both data and errors",
+        })
+    }
+
+    return complete(data)
 }
 
 export async function linearGqlClient<TDataSchema extends z.ZodType>(
