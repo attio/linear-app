@@ -31,7 +31,7 @@
   "dependencies": {
     "@attio/fetchable": "0.0.1-experimental.9",
     "@tanstack/react-query": "^5.83.0",
-    "attio": "0.0.1-experimental.20260715",
+    "attio": "0.0.1-experimental.20260722",
     "event-target-polyfill": "^0.0.4",
     "match-sorter": "8.0.3",
     "react": "19.0.0",

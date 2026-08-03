@@ -1,7 +1,7 @@
 import {isErrored} from "@attio/fetchable"
 import {Button, Divider, Forms, showToast, useForm} from "attio/client"
 import type {CreateIssueInput, CustomerNeedCreateInput} from "../linear"
-import {queryClient} from "../record/widgets/company-customer-request-count-widget"
+import {queryClient} from "../app/extensions/company-customer-request-count/extension"
 import getOrCreateCustomer from "../utils/server/get-or-create-customer.server"
 import {CompaniesCombobox} from "./comboboxes/companies-combobox"
 import {ProjectIssuesCombobox} from "./comboboxes/project-issues-combobox"
