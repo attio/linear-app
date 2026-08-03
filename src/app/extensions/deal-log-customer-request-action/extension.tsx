@@ -1,4 +1,4 @@
-import {runQuery, showDialog, showToast, experimental_extensions} from "attio/client"
+import {runQuery, showDialog, showToast, Extensions} from "attio/client"
 import {LogCustomerRequestDialog} from "../../../components/log-customer-request-dialog"
 import GetCompanyIdByDealId from "../../../graphql/get-company-id-by-deal-id.graphql"
 import ensureConnection from "../../../utils/ensure-connection.server"
@@ -20,7 +20,7 @@ async function getCompanyRecordId(recordId: string) {
     }
 }
 
-export default experimental_extensions.defineExtension({
+export default Extensions.defineExtension({
     type: "record-action",
     id: "deal-log-customer-request-action",
     onTrigger: async ({recordId}) => {

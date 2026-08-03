@@ -1,7 +1,7 @@
-import {showToast, experimental_extensions} from "attio/client"
+import {showToast, Extensions} from "attio/client"
 import {viewCompanyInLinear} from "../../../utils/view-company-in-linear"
 
-export default experimental_extensions.defineExtension({
+export default Extensions.defineExtension({
     type: "record-action",
     id: "company-view-company-action",
     onTrigger: async ({recordId}) => {

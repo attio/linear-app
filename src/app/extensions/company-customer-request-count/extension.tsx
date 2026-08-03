@@ -1,5 +1,5 @@
 import {isErrored} from "@attio/fetchable"
-import {runQuery, showToast, Widget, experimental_extensions} from "attio/client"
+import {runQuery, showToast, Widget, Extensions} from "attio/client"
 import React from "react"
 import "event-target-polyfill"
 import "yet-another-abortcontroller-polyfill"
@@ -88,7 +88,7 @@ async function load(recordId: string) {
 
 export const queryClient = new QueryClient()
 
-export default experimental_extensions.defineExtension({
+export default Extensions.defineExtension({
     type: "record-widget",
     id: "company-customer-request-count",
     label: "Customer requests",

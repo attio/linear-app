@@ -1,7 +1,7 @@
-import {showDialog, experimental_extensions} from "attio/client"
+import {showDialog, Extensions} from "attio/client"
 import {LogCustomerRequestDialog} from "../../../components/log-customer-request-dialog"
 
-export default experimental_extensions.defineExtension({
+export default Extensions.defineExtension({
     type: "call-recording-summary-text-action",
     id: "customer-request-text-selection-call-summary-action",
     label: "Log customer request",

@@ -31,21 +31,12 @@
   "dependencies": {
     "@attio/fetchable": "0.0.1-experimental.9",
     "@tanstack/react-query": "^5.83.0",
-    "attio": "0.0.1-experimental.20260722",
+    "attio": "0.0.1-experimental.20260724.1",
     "event-target-polyfill": "^0.0.4",
     "match-sorter": "8.0.3",
     "react": "19.0.0",
     "yet-another-abortcontroller-polyfill": "^0.0.4",
     "zod": "^4.0.14"
   },
-  "packageManager": "pnpm@10.33.3",
-  "pnpm": {
-    "overrides": {
-      "rollup": "4.34.9"
-    },
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "keytar"
-    ]
-  }
+  "packageManager": "pnpm@10.33.3"
 }
