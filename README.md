@@ -1,6 +1,6 @@
 # Linear
 
-Linear app for Attio, built with the [App SDK](https://docs.attio.com/sdk/introduction).
+Linear app for Attio, built with the [App SDK](https://docs.attio.com/sdk/overview).
 
 ## Overview
 
@@ -25,7 +25,7 @@ You can also log a request directly from a call transcript or summary. Just high
 | `src/components`     | Shared React components                                                                    |
 | `src/graphql`        | GraphQL queries for the [Attio GraphQL schema](https://docs.attio.com/sdk/graphql/graphql) |
 | `src/linear`         | Linear-specific logic, organized by domain                                                 |
-| `src/record/actions` | [Record actions](https://docs.attio.com/sdk/actions/record-action)                         |
+| `src/record/actions` | [Record actions](https://docs.attio.com/sdk/extensions/record-action)                         |
 | `src/record/widgets` | Widgets                                                                                    |
 | `src/text-selection` | Text selection actions for transcripts, call insights and summaries                        |
 | `src/utils`          | Shared utility functions                                                                   |
