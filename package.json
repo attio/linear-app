@@ -19,9 +19,9 @@
   "devDependencies": {
     "@types/node": "^24.13.3",
     "@types/react": "19.2.14",
-    "@typescript-eslint/eslint-plugin": "^8.69.0",
-    "@typescript-eslint/parser": "^8.69.0",
-    "eslint": "^9.39.5",
+    "@typescript-eslint/eslint-plugin": "^8.70.1",
+    "@typescript-eslint/parser": "^8.70.1",
+    "eslint": "^10.11.0",
     "knip": "^6.34.0",
     "prettier": "^3.9.6",
     "typescript": "5.8.3",
@@ -31,7 +31,7 @@
   "dependencies": {
     "@attio/fetchable": "0.0.1-experimental.9",
     "@tanstack/react-query": "^5.102.8",
-    "attio": "1.0.3",
+    "attio": "1.1.3",
     "event-target-polyfill": "^0.0.4",
     "match-sorter": "8.0.3",
     "react": "19.0.0",
